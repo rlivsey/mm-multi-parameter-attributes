@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{mm-multi-parameter-attributes}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Richard Livsey"]
-  s.date = %q{2010-06-17}
+  s.date = %q{2010-06-26}
   s.email = %q{richard@livsey.org}
   s.extra_rdoc_files = ["README.rdoc"]
   s.files = ["LICENSE", "Rakefile", "README.rdoc", "lib/mm-multi-parameter-attributes.rb"]
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Tiny plugin for MongoMapper to add multi-parameter attributes (for date/times)}
+  s.summary = %q{Tiny plugin for MongoMapper to add multi-parameter attributes}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
