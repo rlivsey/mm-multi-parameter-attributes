@@ -15,8 +15,8 @@ module MongoMapper
           normal_attributes = {}
 
           new_attributes.each do |k, v|
-            if k.include?("(")
-              multi_parameter_attributes << [ k, v ]
+            if k.to_s.include?("(")
+              multi_parameter_attributes << [ k.to_s, v ]
             else
               normal_attributes[k] = v
             end

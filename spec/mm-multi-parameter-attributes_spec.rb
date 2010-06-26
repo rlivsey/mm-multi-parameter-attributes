@@ -7,6 +7,13 @@ describe "MongoMapper::Plugins::MultiParameterAttributes" do
     @topic = Topic.new
   end
 
+  it "should work with symbol keys" do
+    attributes = { :"last_read(1i)" => "2004", :"last_read(2i)" => "6", :"last_read(3i)" => "24" }
+
+    @topic.attributes = attributes
+    @topic.last_read.to_date.should == Date.new(2004, 6, 24)    
+  end
+
   it "should assign date" do
     attributes = { "last_read(1i)" => "2004", "last_read(2i)" => "6", "last_read(3i)" => "24" }
 
