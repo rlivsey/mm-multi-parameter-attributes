@@ -43,7 +43,7 @@ module MongoMapper
           callstack.each do |name, values_with_empty_parameters|
             # in order to allow a date to be set without a year, we must keep the empty values.
             # Otherwise, we wouldn't be able to distinguish it from a date with an empty day.
-            values = values_with_empty_parameters.reject(&:nil?)
+            values = values_with_empty_parameters.reject(&:nil?).map(&:to_i)
 
             if !values.reject{|x| x.blank? }.empty?
               key = self.class.keys[name]
