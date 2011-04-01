@@ -79,7 +79,20 @@ describe "MongoMapper::Plugins::MultiParameterAttributes" do
     @topic.last_read.to_date.should == Date.new(@now.year, @now.month, 24)
   end
 
-  it "should assign date with all empty" do
+  it "should not assign date with all empty" do
+    attributes = { "last_read(1i)" => "", "last_read(2i)" => "", "last_read(3i)" => "" }
+
+    @topic.attributes = attributes
+    @topic.last_read.should be_nil
+  end
+
+  it "should assign a date to nil after it has been assigned" do
+    attributes = { "last_read(1i)" => "2004", "last_read(2i)" => "6", "last_read(3i)" => "24" }
+
+    @topic.attributes = attributes
+    @topic.last_read.to_date.should == Date.new(2004, 6, 24)
+
+
     attributes = { "last_read(1i)" => "", "last_read(2i)" => "", "last_read(3i)" => "" }
 
     @topic.attributes = attributes

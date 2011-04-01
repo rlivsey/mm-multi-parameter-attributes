@@ -60,12 +60,14 @@ module MongoMapper
               else
                 klass.new(*values_with_empty_parameters)
               end
-              writer_method = "#{name}="
-              if respond_to?(writer_method)
-                self.send(writer_method, value)
-              else
-                self[name.to_s] = value
-              end
+            else
+              value = nil
+            end
+            writer_method = "#{name}="
+            if respond_to?(writer_method)
+              self.send(writer_method, value)
+            else
+              self[name.to_s] = value
             end
           end
         end
