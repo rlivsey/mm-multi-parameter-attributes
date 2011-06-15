@@ -10,7 +10,7 @@ https://gist.github.com/268948/c5ca7d8fb02470c5c8a0a8225390a4186349a8d4
 Either load it into all models, or individual models:
   
   # add to all models
-  MongoMapper::Document.append_inclusions(MongoMapper::Plugins::MultiParameterAttributes)
+  MongoMapper::Document.plugin(MongoMapper::Plugins::MultiParameterAttributes)
 
   # add to a specific model
   plugin MongoMapper::Plugins::MultiParameterAttributes
