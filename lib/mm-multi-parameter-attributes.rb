@@ -40,35 +40,45 @@ module MongoMapper
         callstack.each do |name, values_with_empty_parameters|
           # in order to allow a date to be set without a year, we must keep the empty values.
           # Otherwise, we wouldn't be able to distinguish it from a date with an empty day.
-          values = values_with_empty_parameters.reject(&:nil?)
+          values = values_with_empty_parameters.reject(&:blank?)
 
-          if !values.reject{|x| x.blank? }.empty?
-            values = values.map(&:to_i)
+          if values.any?
 
             key = self.class.keys[name]
             raise ArgumentError, "Unknown key #{name}" if key.nil?
             klass = key.type
 
             value = if Time == klass
-              Time.zone.local(*values)
-            elsif Date == klass
-              begin
-                values = values_with_empty_parameters.map{|v| v.blank? ? 1 : v.to_i}
-                Date.new(*values)
-              rescue ArgumentError => ex # if Date.new raises an exception on an invalid date
-                Time.zone.local(*values).to_date # we instantiate Time object and convert it back to a date thus using Time's logic in handling invalid dates
-              end
-            else
-              klass.new(*values)
-            end
-            writer_method = "#{name}="
-            if respond_to?(writer_method)
-              self.send(writer_method, value)
-            else
-              self[name.to_s] = value
-            end
+                      Time.zone.local(*valid_datetime_values(values_with_empty_parameters))
+                    elsif Date == klass
+                      values = valid_datetime_values(values_with_empty_parameters)
+                      begin
+                        Date.new(*values)
+                      rescue ArgumentError => ex # if Date.new raises an exception on an invalid date
+                        Time.zone.local(*values).to_date # we instantiate Time object and convert it back to a date thus using Time's logic in handling invalid dates
+                      end
+                    else
+                      klass.new(*values_with_empty_parameters)
+                    end
+          else
+            value = nil
+          end
+          writer_method = "#{name}="
+          if respond_to?(writer_method)
+            self.send(writer_method, value)
+          else
+            self[name.to_s] = value
           end
         end
+      end
+
+      # Ensures that values for date are set to now if blank (as month and say cannot be 0) and that all values are converted to integers
+      def valid_datetime_values(values)
+        now = Time.zone.now
+        values[0] = now.year if values[0].blank?
+        values[1] = now.month if values[1].blank?
+        values[2] = now.day if values[2].blank?
+        values.map(&:to_i)
       end
 
       def extract_callstack_for_multiparameter_attributes(pairs)
